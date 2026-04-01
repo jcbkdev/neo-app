@@ -1,0 +1,68 @@
+.asteroids-table {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  font-family: "DM Mono";
+  font-weight: 400;
+  font-size: 1rem;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.asteroids-table thead {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  height: 2.25rem;
+  padding: 0 16px;
+
+  background-color: color-mix(in srgb, var(--color-primary) 24%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-primary) 32%, transparent);
+  border-radius: var(--rounding);
+
+  margin-bottom: 8px;
+}
+
+.asteroids-table tr {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  column-gap: 24px;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+}
+
+.asteroids-table thead th {
+  width: 100%;
+  text-align: left;
+  font-weight: 400;
+}
+
+.asteroids-table tbody {
+  display: block;
+  flex: 1;
+  overflow-y: auto;
+  min-height: 0;
+}
+
+.asteroids-table tbody tr {
+  height: fit-content;
+  box-sizing: border-box;
+  padding: 12px 16px;
+  background-color: var(--color-glass);
+  border: 1px solid var(--color-glass);
+  border-radius: var(--rounding);
+}
+
+.asteroids-table tbody tr:not(:last-child) {
+  margin-bottom: 8px;
+}
+
+.asteroids-table tbody td {
+  width: 100%;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
