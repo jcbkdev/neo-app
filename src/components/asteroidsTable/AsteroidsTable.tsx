@@ -16,11 +16,6 @@ export default function AsteroidsTable(props: Props) {
 
   const neo = props.neoResponse.data.near_earth_objects;
 
-  console.log(
-    "Component is rendering! Current Max Filter is:",
-    props.displayFilters.velocityMax,
-  );
-
   const displayedAsteroids = useMemo(() => {
     let allAsteroids = Object.entries(neo).flatMap(([date, asteroids]) =>
       asteroids.map((asteroid) => ({
@@ -29,22 +24,42 @@ export default function AsteroidsTable(props: Props) {
       })),
     );
 
-    if (props.displayFilters.velocityMin) {
-      allAsteroids = allAsteroids.filter(
-        (a) =>
-          Number(
-            a.close_approach_data[0].relative_velocity.kilometers_per_hour,
-          ) >= props.displayFilters.velocityMin!,
-      );
+    if (props.displayFilters.velocity) {
+      if (props.displayFilters.velocity.min) {
+        allAsteroids = allAsteroids.filter(
+          (a) =>
+            Number(
+              a.close_approach_data[0].relative_velocity.kilometers_per_hour,
+            ) >= props.displayFilters.velocity!.min!,
+        );
+      }
+
+      if (props.displayFilters.velocity.max) {
+        allAsteroids = allAsteroids.filter(
+          (a) =>
+            Number(
+              a.close_approach_data[0].relative_velocity.kilometers_per_hour,
+            ) <= props.displayFilters.velocity!.max!,
+        );
+      }
     }
 
-    if (props.displayFilters.velocityMax) {
-      allAsteroids = allAsteroids.filter(
-        (a) =>
-          Number(
-            a.close_approach_data[0].relative_velocity.kilometers_per_hour,
-          ) <= props.displayFilters.velocityMax!,
-      );
+    if (props.displayFilters.diameter) {
+      if (props.displayFilters.diameter.min) {
+        allAsteroids = allAsteroids.filter(
+          (a) =>
+            Number(a.estimated_diameter.kilometers.estimated_diameter_max) >=
+            props.displayFilters.diameter!.min!,
+        );
+      }
+
+      if (props.displayFilters.diameter.max) {
+        allAsteroids = allAsteroids.filter(
+          (a) =>
+            Number(a.estimated_diameter.kilometers.estimated_diameter_max) <=
+            props.displayFilters.diameter!.max!,
+        );
+      }
     }
 
     return allAsteroids;

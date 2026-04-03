@@ -5,10 +5,17 @@ import FiltersPanel from "./components/filtersPanel/FiltersPanel";
 import { useNeo } from "./hooks/useNeo";
 import DatePicker from "./components/datePicker/DatePicker";
 import VelocityRange from "./components/velocityRange/VelocityRange";
+import EstimatedDiameterRange from "./components/estimatedDiameterRange/EstimatedDiameterRange";
 
 export interface DisplayFilters {
-  velocityMax?: number;
-  velocityMin?: number;
+  velocity?: {
+    min?: number;
+    max?: number;
+  };
+  diameter?: {
+    min?: number;
+    max?: number;
+  };
 }
 
 function App() {
@@ -30,13 +37,39 @@ function App() {
             setVelocityMin={(newValue) => {
               setDisplayFilters((prev) => ({
                 ...prev,
-                velocityMin: newValue,
+                velocity: {
+                  ...prev.velocity,
+                  min: newValue,
+                },
               }));
             }}
             setVelocityMax={(newValue) => {
               setDisplayFilters((prev) => ({
                 ...prev,
-                velocityMax: newValue,
+                velocity: {
+                  ...prev.velocity,
+                  max: newValue,
+                },
+              }));
+            }}
+          />
+          <EstimatedDiameterRange
+            setDiameterMin={(newValue) => {
+              setDisplayFilters((prev) => ({
+                ...prev,
+                diameter: {
+                  ...prev.diameter,
+                  min: newValue,
+                },
+              }));
+            }}
+            setDiameterMax={(newValue) => {
+              setDisplayFilters((prev) => ({
+                ...prev,
+                diameter: {
+                  ...prev.diameter,
+                  max: newValue,
+                },
               }));
             }}
           />

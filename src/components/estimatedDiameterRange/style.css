@@ -1,0 +1,33 @@
+.diameter-range {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  box-sizing: border-box;
+  padding: 16px;
+  background-color: var(--color-glass);
+  border: 1px solid var(--color-glass);
+  border-radius: var(--rounding);
+}
+
+.diameter-input-wrapper {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+}
+
+.diameter-input-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.diameter-input-container input::-webkit-outer-spin-button,
+.diameter-input-container input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.diameter-input-container input[type="number"] {
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
