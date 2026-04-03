@@ -6,6 +6,9 @@ import { useNeo } from "./hooks/useNeo";
 import DatePicker from "./components/datePicker/DatePicker";
 import VelocityRange from "./components/velocityRange/VelocityRange";
 import EstimatedDiameterRange from "./components/estimatedDiameterRange/EstimatedDiameterRange";
+import SentryObjectFilter, {
+  type SentryObjectFilterOption,
+} from "./components/sentryObjectFilter/SentryObjectFilter";
 
 export interface DisplayFilters {
   velocity?: {
@@ -16,10 +19,13 @@ export interface DisplayFilters {
     min?: number;
     max?: number;
   };
+  sentryObjectFilterOption: SentryObjectFilterOption;
 }
 
 function App() {
-  const [displayFilters, setDisplayFilters] = useState<DisplayFilters>({});
+  const [displayFilters, setDisplayFilters] = useState<DisplayFilters>({
+    sentryObjectFilterOption: "show",
+  });
   const [startDate, setStartDate] = useState<Date>(new Date());
   const [endDate, setEndDate] = useState<Date>();
   const neoResponse = useNeo(startDate, endDate);
@@ -70,6 +76,14 @@ function App() {
                   ...prev.diameter,
                   max: newValue,
                 },
+              }));
+            }}
+          />
+          <SentryObjectFilter
+            setSentryObjectFilterOption={(newValue) => {
+              setDisplayFilters((prev) => ({
+                ...prev,
+                sentryObjectFilterOption: newValue,
               }));
             }}
           />

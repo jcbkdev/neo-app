@@ -16,12 +16,22 @@ h4 {
 }
 
 .filters {
+  min-width: 256px;
   width: 256px;
+  flex-shrink: 0;
   box-sizing: border-box;
   padding: 16px;
   background-color: var(--color-glass);
   border: 1px solid var(--color-glass);
   border-radius: var(--rounding);
+
+  overflow-y: auto;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.filters::-webkit-scrollbar {
+  display: none;
 }
 
 .filters-title {

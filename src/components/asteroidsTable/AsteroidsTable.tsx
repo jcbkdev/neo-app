@@ -21,6 +21,7 @@ export default function AsteroidsTable(props: Props) {
       asteroids.map((asteroid) => ({
         ...asteroid,
         approachDate: date,
+        highlight: false,
       })),
     );
 
@@ -62,6 +63,23 @@ export default function AsteroidsTable(props: Props) {
       }
     }
 
+    switch (props.displayFilters.sentryObjectFilterOption) {
+      case "show":
+        break;
+      case "highlight":
+        allAsteroids.filter((a) => a.is_sentry_object && (a.highlight = true));
+        break;
+      case "only":
+        allAsteroids = allAsteroids.filter((a) => a.is_sentry_object);
+        break;
+      case "hide":
+        allAsteroids = allAsteroids.filter((a) => !a.is_sentry_object);
+        break;
+      default:
+        throw new Error("Invalid sentryObjectFilterOption value");
+        break;
+    }
+
     return allAsteroids;
   }, [neo, props.displayFilters]);
 
@@ -78,7 +96,10 @@ export default function AsteroidsTable(props: Props) {
       </thead>
       <tbody>
         {displayedAsteroids.map((asteroid) => (
-          <tr key={asteroid.id}>
+          <tr
+            className={asteroid.highlight ? "row-highlight" : ""}
+            key={asteroid.id}
+          >
             <td scope="row">{asteroid.name}</td>
             <td scope="row">
               {

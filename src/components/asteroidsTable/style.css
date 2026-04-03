@@ -66,3 +66,9 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+.row-highlight {
+  background-color: var(--color-crit) !important;
+  border-color: var(--color-crit) !important;
+  box-shadow: 0 0 4px var(--color-crit) !important;
+}
