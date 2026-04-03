@@ -1,5 +1,14 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { isDateRangeValid } from "../utils/isDateRangeValid";
+import { formatDate } from "../utils/formatDate";
+
+export interface NeoHookResponse {
+  data: NeoResponse | undefined;
+  isLoading: boolean;
+  error: any;
+  message?: string;
+}
 
 export interface NeoResponse {
   links: {
@@ -62,39 +71,43 @@ interface MissDistance {
   miles: string;
 }
 
-function isDateRangeValid(
-  date1: Date,
-  date2: Date,
-  rangeDays: number,
-): boolean {
-  const MS_PER_DAY = 1000 * 60 * 60 * 24;
-  const diffInMs = Math.abs(date1.getTime() - date2.getTime());
-
-  return diffInMs <= MS_PER_DAY * rangeDays;
-}
-
-function formatDate(date: Date): string {
-  const year = date.getFullYear();
-  const month = date.getMonth() + 1;
-  const day = date.getDate();
-
-  return `${year}-${month}-${day}`;
-}
-
-export function useNeo(start_date: Date, end_date: Date) {
+export function useNeo(
+  start_date: Date | undefined,
+  end_date: Date | undefined,
+): NeoHookResponse {
   const [neoData, setNeoData] = useState<NeoResponse>();
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  if (start_date > end_date)
-    throw new Error("start_date must not be past end_date");
-
-  if (!isDateRangeValid(start_date, end_date, 7))
-    throw new Error(
-      "time difference between start_date and end_date must not exceed 7 days",
-    );
+  const [error, setError] = useState<any>(null);
+  const [message, setMessage] = useState<string>();
 
   useEffect(() => {
+    setNeoData(undefined);
+    setMessage(undefined);
+    setError(null);
+
+    if (!start_date || !end_date) {
+      setMessage("Set date range");
+      return;
+    }
+
+    if (start_date > end_date) {
+      setMessage("Start date must not be past end date");
+      setError(new Error("start_date must not be past end_date"));
+      return;
+    }
+
+    if (!isDateRangeValid(start_date, end_date, 7)) {
+      setMessage(
+        "Time difference between start date and end date must not exceed 7 days",
+      );
+      setError(
+        new Error(
+          "time difference between start_date and end_date must not exceed 7 days",
+        ),
+      );
+      return;
+    }
+
     const controller = new AbortController();
 
     const fetchNeoData = async () => {
@@ -123,7 +136,7 @@ export function useNeo(start_date: Date, end_date: Date) {
     fetchNeoData();
 
     return () => controller.abort();
-  }, []);
+  }, [start_date, end_date]);
 
-  return { data: neoData, isLoading, error };
+  return { data: neoData, isLoading, error, message };
 }

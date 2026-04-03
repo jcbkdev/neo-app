@@ -1,0 +1,10 @@
+.date-picker {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  box-sizing: border-box;
+  padding: 16px;
+  background-color: var(--color-glass);
+  border: 1px solid var(--color-glass);
+  border-radius: var(--rounding);
+}

@@ -1,14 +1,33 @@
+import { useState } from "react";
+import "./App.css";
 import AsteroidsTable from "./components/asteroidsTable/AsteroidsTable";
-import { useNeo, type Neo } from "./hooks/useNeo";
+import FiltersPanel from "./components/filtersPanel/FiltersPanel";
+import { useNeo } from "./hooks/useNeo";
+import DatePicker from "./components/datePicker/DatePicker";
 
 function App() {
-  const neo = useNeo(new Date("2025-08-01"), new Date("2025-08-08"));
+  const [startDate, setStartDate] = useState<Date>(new Date());
+  const [endDate, setEndDate] = useState<Date>();
+  const neoResponse = useNeo(startDate, endDate);
 
-  if (neo.isLoading) return <div>Loading data...</div>;
-  if (neo.error) return <div>Error</div>;
-  if (!neo.data) return <div>No data available</div>;
-
-  return <AsteroidsTable asteroids={neo.data.near_earth_objects} />;
+  return (
+    <>
+      <div className="main-box">
+        <FiltersPanel>
+          <DatePicker
+            startDate={startDate}
+            setStartDate={setStartDate}
+            setEndDate={setEndDate}
+          />
+        </FiltersPanel>
+        {!neoResponse.data && neoResponse.message ? (
+          <div role="alert">{neoResponse.message}</div>
+        ) : (
+          <AsteroidsTable neoResponse={neoResponse} />
+        )}
+      </div>
+    </>
+  );
 }
 
 export default App;
