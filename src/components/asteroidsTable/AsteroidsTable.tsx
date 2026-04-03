@@ -22,6 +22,7 @@ export default function AsteroidsTable(props: Props) {
         ...asteroid,
         approachDate: date,
         highlight: false,
+        highlightType: "",
       })),
     );
 
@@ -63,11 +64,42 @@ export default function AsteroidsTable(props: Props) {
       }
     }
 
+    switch (props.displayFilters.PHAFilterOption) {
+      case "show":
+        break;
+      case "highlight":
+        allAsteroids.filter((a) => {
+          if (a.is_potentially_hazardous_asteroid) {
+            a.highlight = true;
+            a.highlightType = "warn";
+          }
+        });
+        break;
+      case "only":
+        allAsteroids = allAsteroids.filter(
+          (a) => a.is_potentially_hazardous_asteroid,
+        );
+        break;
+      case "hide":
+        allAsteroids = allAsteroids.filter(
+          (a) => !a.is_potentially_hazardous_asteroid,
+        );
+        break;
+      default:
+        throw new Error("Invalid PHAFilterOption value");
+        break;
+    }
+
     switch (props.displayFilters.sentryObjectFilterOption) {
       case "show":
         break;
       case "highlight":
-        allAsteroids.filter((a) => a.is_sentry_object && (a.highlight = true));
+        allAsteroids.filter((a) => {
+          if (a.is_sentry_object) {
+            a.highlight = true;
+            a.highlightType = "crit";
+          }
+        });
         break;
       case "only":
         allAsteroids = allAsteroids.filter((a) => a.is_sentry_object);
@@ -97,7 +129,11 @@ export default function AsteroidsTable(props: Props) {
       <tbody>
         {displayedAsteroids.map((asteroid) => (
           <tr
-            className={asteroid.highlight ? "row-highlight" : ""}
+            className={
+              asteroid.highlight
+                ? `row-highlight-${asteroid.highlightType}`
+                : ""
+            }
             key={asteroid.id}
           >
             <td scope="row">{asteroid.name}</td>

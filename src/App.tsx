@@ -9,6 +9,9 @@ import EstimatedDiameterRange from "./components/estimatedDiameterRange/Estimate
 import SentryObjectFilter, {
   type SentryObjectFilterOption,
 } from "./components/sentryObjectFilter/SentryObjectFilter";
+import PHAFilter, {
+  type PHAFilterOption,
+} from "./components/PHAFilter/PHAFilter";
 
 export interface DisplayFilters {
   velocity?: {
@@ -20,11 +23,13 @@ export interface DisplayFilters {
     max?: number;
   };
   sentryObjectFilterOption: SentryObjectFilterOption;
+  PHAFilterOption: PHAFilterOption;
 }
 
 function App() {
   const [displayFilters, setDisplayFilters] = useState<DisplayFilters>({
     sentryObjectFilterOption: "show",
+    PHAFilterOption: "show",
   });
   const [startDate, setStartDate] = useState<Date>(new Date());
   const [endDate, setEndDate] = useState<Date>();
@@ -84,6 +89,14 @@ function App() {
               setDisplayFilters((prev) => ({
                 ...prev,
                 sentryObjectFilterOption: newValue,
+              }));
+            }}
+          />
+          <PHAFilter
+            setPHAFilterOption={(newValue) => {
+              setDisplayFilters((prev) => ({
+                ...prev,
+                PHAFilterOption: newValue,
               }));
             }}
           />

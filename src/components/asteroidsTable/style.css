@@ -67,8 +67,14 @@
   text-overflow: ellipsis;
 }
 
-.row-highlight {
+.row-highlight-crit {
   background-color: var(--color-crit) !important;
   border-color: var(--color-crit) !important;
   box-shadow: 0 0 4px var(--color-crit) !important;
+}
+
+.row-highlight-warn {
+  background-color: var(--color-warn) !important;
+  border-color: var(--color-warn) !important;
+  box-shadow: 0 0 4px var(--color-warn) !important;
 }
