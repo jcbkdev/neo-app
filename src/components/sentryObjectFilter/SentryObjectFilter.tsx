@@ -18,7 +18,7 @@ export default function SentryObjectFilter(props: Props) {
       <h3>Sentry objects</h3>
       <select
         id="sentry-filter-select"
-        defaultValue={"sg"}
+        defaultValue={"show"}
         onChange={handleSelect}
       >
         <option value="show">Show</option>
