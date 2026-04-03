@@ -7,8 +7,8 @@ interface Props {
 export default function FiltersPanel(props: Props) {
   return (
     <div className="filters">
-      <h2>Filters</h2>
-      <div>{props.children}</div>
+      <h2 className="filters-title">Filters</h2>
+      <div className="filters-container">{props.children}</div>
     </div>
   );
 }
