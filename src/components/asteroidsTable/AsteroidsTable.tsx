@@ -237,16 +237,23 @@ export default function AsteroidsTable(props: Props) {
           >
             <td scope="row">{asteroid.name}</td>
             <td scope="row">
-              {
+              {Number(
                 asteroid.close_approach_data[0].relative_velocity
-                  .kilometers_per_hour
-              }
+                  .kilometers_per_hour,
+              ).toFixed(2)}
+              {" kmph"}
             </td>
             <td scope="row">
-              {asteroid.estimated_diameter.kilometers.estimated_diameter_max}
+              {asteroid.estimated_diameter.meters.estimated_diameter_max.toFixed(
+                2,
+              )}
+              {" m"}
             </td>
             <td scope="row">
-              {asteroid.close_approach_data[0].miss_distance.kilometers}
+              {Number(
+                asteroid.close_approach_data[0].miss_distance.kilometers,
+              ).toFixed(2)}{" "}
+              {" km"}
             </td>
             <td scope="row">{asteroid.approachDate}</td>
           </tr>
