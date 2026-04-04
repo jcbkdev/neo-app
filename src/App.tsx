@@ -12,6 +12,7 @@ import SentryObjectFilter, {
 import PHAFilter, {
   type PHAFilterOption,
 } from "./components/PHAFilter/PHAFilter";
+import Analytics from "./components/analytics/Analytics";
 
 export interface DisplayFilters {
   velocity?: {
@@ -37,78 +38,81 @@ function App() {
 
   return (
     <>
-      <div className="main-box">
-        <FiltersPanel>
-          <DatePicker
-            startDate={startDate}
-            setStartDate={setStartDate}
-            setEndDate={setEndDate}
-          />
-          <VelocityRange
-            setVelocityMin={(newValue) => {
-              setDisplayFilters((prev) => ({
-                ...prev,
-                velocity: {
-                  ...prev.velocity,
-                  min: newValue,
-                },
-              }));
-            }}
-            setVelocityMax={(newValue) => {
-              setDisplayFilters((prev) => ({
-                ...prev,
-                velocity: {
-                  ...prev.velocity,
-                  max: newValue,
-                },
-              }));
-            }}
-          />
-          <EstimatedDiameterRange
-            setDiameterMin={(newValue) => {
-              setDisplayFilters((prev) => ({
-                ...prev,
-                diameter: {
-                  ...prev.diameter,
-                  min: newValue,
-                },
-              }));
-            }}
-            setDiameterMax={(newValue) => {
-              setDisplayFilters((prev) => ({
-                ...prev,
-                diameter: {
-                  ...prev.diameter,
-                  max: newValue,
-                },
-              }));
-            }}
-          />
-          <SentryObjectFilter
-            setSentryObjectFilterOption={(newValue) => {
-              setDisplayFilters((prev) => ({
-                ...prev,
-                sentryObjectFilterOption: newValue,
-              }));
-            }}
-          />
-          <PHAFilter
-            setPHAFilterOption={(newValue) => {
-              setDisplayFilters((prev) => ({
-                ...prev,
-                PHAFilterOption: newValue,
-              }));
-            }}
-          />
-        </FiltersPanel>
-        {!neoResponse.data && neoResponse.message ? (
-          <div role="alert">{neoResponse.message}</div>
-        ) : (
-          <AsteroidsTable
-            displayFilters={displayFilters}
-            neoResponse={neoResponse}
-          />
-        )}
+      <div className="app-wrapper">
+        <div className="main-box">
+          <FiltersPanel>
+            <DatePicker
+              startDate={startDate}
+              setStartDate={setStartDate}
+              setEndDate={setEndDate}
+            />
+            <VelocityRange
+              setVelocityMin={(newValue) => {
+                setDisplayFilters((prev) => ({
+                  ...prev,
+                  velocity: {
+                    ...prev.velocity,
+                    min: newValue,
+                  },
+                }));
+              }}
+              setVelocityMax={(newValue) => {
+                setDisplayFilters((prev) => ({
+                  ...prev,
+                  velocity: {
+                    ...prev.velocity,
+                    max: newValue,
+                  },
+                }));
+              }}
+            />
+            <EstimatedDiameterRange
+              setDiameterMin={(newValue) => {
+                setDisplayFilters((prev) => ({
+                  ...prev,
+                  diameter: {
+                    ...prev.diameter,
+                    min: newValue,
+                  },
+                }));
+              }}
+              setDiameterMax={(newValue) => {
+                setDisplayFilters((prev) => ({
+                  ...prev,
+                  diameter: {
+                    ...prev.diameter,
+                    max: newValue,
+                  },
+                }));
+              }}
+            />
+            <SentryObjectFilter
+              setSentryObjectFilterOption={(newValue) => {
+                setDisplayFilters((prev) => ({
+                  ...prev,
+                  sentryObjectFilterOption: newValue,
+                }));
+              }}
+            />
+            <PHAFilter
+              setPHAFilterOption={(newValue) => {
+                setDisplayFilters((prev) => ({
+                  ...prev,
+                  PHAFilterOption: newValue,
+                }));
+              }}
+            />
+          </FiltersPanel>
+          {!neoResponse.data && neoResponse.message ? (
+            <div role="alert">{neoResponse.message}</div>
+          ) : (
+            <AsteroidsTable
+              displayFilters={displayFilters}
+              neoResponse={neoResponse}
+            />
+          )}
+        </div>
+        <Analytics neoResponse={neoResponse} />
       </div>
     </>
   );
