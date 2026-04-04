@@ -1,7 +1,30 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import type { DisplayFilters } from "../../App";
 import type { NeoHookResponse } from "../../hooks/useNeo";
 import "./style.css";
+
+const TABLE_COLUMNS = [
+  {
+    id: "name",
+    label: "name",
+  },
+  {
+    id: "velocity",
+    label: "velocity",
+  },
+  {
+    id: "diameter",
+    label: "est. diameter",
+  },
+  {
+    id: "distance",
+    label: "distance",
+  },
+  {
+    id: "date",
+    label: "date",
+  },
+];
 
 interface Props {
   neoResponse?: NeoHookResponse;
@@ -16,6 +39,8 @@ export default function AsteroidsTable(props: Props) {
 
   const neo = props.neoResponse.data.near_earth_objects;
 
+  const [sortBy, setSortBy] = useState("name");
+  const [sortOrder, setSortOrder] = useState(1);
   const displayedAsteroids = useMemo(() => {
     let allAsteroids = Object.entries(neo).flatMap(([date, asteroids]) =>
       asteroids.map((asteroid) => ({
@@ -26,6 +51,7 @@ export default function AsteroidsTable(props: Props) {
       })),
     );
 
+    //filtering
     if (props.displayFilters.velocity) {
       if (props.displayFilters.velocity.min) {
         allAsteroids = allAsteroids.filter(
@@ -112,18 +138,91 @@ export default function AsteroidsTable(props: Props) {
         break;
     }
 
+    //sorting
+    switch (sortBy) {
+      case "name":
+        allAsteroids = [...allAsteroids].sort(
+          (a, b) => sortOrder * a.name.localeCompare(b.name),
+        );
+        break;
+      case "velocity":
+        allAsteroids = [...allAsteroids].sort(
+          (a, b) =>
+            sortOrder *
+            (Number(
+              a.close_approach_data[0].relative_velocity.kilometers_per_hour,
+            ) -
+              Number(
+                b.close_approach_data[0].relative_velocity.kilometers_per_hour,
+              )),
+        );
+        break;
+      case "diameter":
+        allAsteroids = [...allAsteroids].sort(
+          (a, b) =>
+            sortOrder *
+            (Number(a.estimated_diameter.kilometers.estimated_diameter_max) -
+              Number(b.estimated_diameter.kilometers.estimated_diameter_max)),
+        );
+        break;
+      case "distance":
+        allAsteroids = [...allAsteroids].sort(
+          (a, b) =>
+            sortOrder *
+            (Number(a.close_approach_data[0].miss_distance.kilometers) -
+              Number(b.close_approach_data[0].miss_distance.kilometers)),
+        );
+        break;
+      case "date":
+        allAsteroids = [...allAsteroids].sort(
+          (a, b) =>
+            sortOrder *
+            (new Date(a.approachDate).getTime() -
+              new Date(b.approachDate).getTime()),
+        );
+        break;
+      default:
+        break;
+    }
+
     return allAsteroids;
-  }, [neo, props.displayFilters]);
+  }, [neo, props.displayFilters, sortBy, sortOrder]);
+
+  const handleSort = (columnName: string) => {
+    if (sortBy === columnName) {
+      setSortOrder((prev) => prev * -1);
+    } else {
+      setSortOrder(1);
+      setSortBy(columnName);
+    }
+  };
 
   return (
     <table className="asteroids-table">
       <thead>
         <tr>
-          <th scope="col">name</th>
-          <th scope="col">velocity</th>
-          <th scope="col">est. diameter</th>
-          <th scope="col">distance</th>
-          <th scope="col">date</th>
+          {TABLE_COLUMNS.map((col) => {
+            const isActive = col.id === sortBy;
+            const sortOrderStr = sortOrder === 1 ? "asc" : "desc";
+
+            return (
+              <th scope="col" key={col.id}>
+                <button
+                  className="th-button"
+                  onClick={() => handleSort(col.id)}
+                >
+                  {col.label}
+                  {isActive && (
+                    <img
+                      src="/sort_arrow.svg"
+                      className={`sort-arrow-${sortOrderStr}`}
+                      alt=""
+                    />
+                  )}
+                </button>
+              </th>
+            );
+          })}
         </tr>
       </thead>
       <tbody>

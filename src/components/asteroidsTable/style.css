@@ -78,3 +78,23 @@
   border-color: var(--color-warn) !important;
   box-shadow: 0 0 4px var(--color-warn) !important;
 }
+
+.th-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  background: unset;
+  color: unset;
+  font: unset;
+  border: unset;
+  cursor: pointer;
+}
+
+.th-button:hover {
+  opacity: 0.85;
+}
+
+.sort-arrow-desc {
+  transform: rotate(180deg);
+}
