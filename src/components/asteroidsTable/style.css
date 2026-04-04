@@ -8,6 +8,11 @@
   font-size: 1rem;
   border-collapse: collapse;
   table-layout: fixed;
+  background-color: var(--color-glass);
+  border: 1px solid var(--color-glass);
+  border-radius: var(--rounding);
+  box-sizing: border-box;
+  padding: 16px;
 }
 
 .asteroids-table thead {
@@ -44,6 +49,7 @@
   flex: 1;
   overflow-y: auto;
   min-height: 0;
+  border-radius: var(--rounding);
 }
 
 .asteroids-table tbody tr {
